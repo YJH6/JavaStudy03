@@ -8,14 +8,14 @@ public class User {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    private double verificationCode;//验证码
-    public double getVerificationCode(){return verificationCode;}
-    public void setVerificationCode(double verificationCode){this.verificationCode=verificationCode;}
+    private String verificationCode;//验证码
+    public String getVerificationCode(){return verificationCode;}
+    public void setVerificationCode(String verificationCode){this.verificationCode=verificationCode;}
     private String eMail;  // 邮箱
     public String geteMail() {
         return eMail;
     }
-    public void seteMail(String userName) {
+    public void setEMail(String userName) {
         this.eMail = eMail;
     }
 }

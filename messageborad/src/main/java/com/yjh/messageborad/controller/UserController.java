@@ -94,10 +94,10 @@ public class UserController {
 
     @RequestMapping(value = "/checkEMail",method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> checkEMail(@RequestParam("verificationCode") final double verificationCode){
+    public Map<String,Object> checkEMail(@RequestParam("verificationCode") final double userVerificationCode){
         Map<String,Object> ans = new HashMap<>();
-        logger.info("提交的参数{}{}",verificationCode);
-        if (userService.checkMail(verificationCode)){
+        logger.info("提交的参数{}{}",userVerificationCode);
+        if (userService.checkMail(userVerificationCode)){
             ans.put("info","成功");
             ans.put("code",200);
         }else {

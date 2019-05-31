@@ -15,7 +15,7 @@ public class CreateMail {
         //指明邮件的发件人
         message.setFrom(new InternetAddress("ash_yjh@163.com"));
         //指明邮件的收件人
-        message.setRecipient(Message.RecipientType.TO,new InternetAddress(user.geteMail()));
+        message.setRecipient(Message.RecipientType.TO,new InternetAddress("191148912@qq.com"));
         //邮件的标题
         message.setSubject("验证码");
         //邮件的文本内容

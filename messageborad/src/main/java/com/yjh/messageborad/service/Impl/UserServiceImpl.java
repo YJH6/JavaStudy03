@@ -23,37 +23,36 @@ public class UserServiceImpl implements UserService {
     public User user = new User();
     @Override
     public Boolean register(String userName, String password,String eMail) {
-        String newPassword;
-        newPassword = MD5Util.getMD5(password);
-        final double verificationCode = Math.random()*9000+1000;
+        String newPassword = MD5Util.getMD5(password);
+        int verificationCode = (int)(Math.random()*9000+1000);
+        String vftc = String.valueOf(verificationCode);
         user.setUserName(userName);
-        user.setVerificationCode(verificationCode);
-        user.seteMail(eMail);
-        SendMail sendMail = new SendMail();
+        user.setVerificationCode(vftc);
+        user.setEMail(eMail);
         try {
-            sendMail.sendMail(user);
+            SendMail.sendMail(user);
+            String sql1 = "select count(*) from yjh.user where username= #{username}";
+            String sql2 = "INSERT INTO yjh.user SET username =#{username},password =#{password}";
+            Map<String, Object> checkRepetition = new HashMap<>();
+            checkRepetition.put("sql", sql1);
+            checkRepetition.put("username", userName);
+            Map<String, Object> register = new HashMap<>();
+            register.put("sql", sql2);
+            register.put("username", userName);
+            register.put("password", newPassword);
+            List<Map<String, Object>> res = sqlMapper.sql(checkRepetition);
+            if (Objects.nonNull(res) && res.size() > 0) {
+                Map<String, Object> tmp = res.get(0);
+                long cnt = (long) tmp.get("count(*)");
+                if (cnt == 1) {
+                    return false;
+                } else {
+                    List<Map<String, Object>> res2 = sqlMapper.sql(register);
+                    return true;
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        String sql1 = "select count(*) from yjh.user where username= #{username}";
-        String sql2 = "INSERT INTO yjh.user SET username =#{username},password =#{password}";
-        Map<String, Object> checkRepetition = new HashMap<>();
-        checkRepetition.put("sql", sql1);
-        checkRepetition.put("username", userName);
-        Map<String, Object> register = new HashMap<>();
-        register.put("sql", sql2);
-        register.put("username", userName);
-        register.put("password", newPassword);
-        List<Map<String, Object>> res = sqlMapper.sql(checkRepetition);
-        if (Objects.nonNull(res) && res.size() > 0) {
-            Map<String, Object> tmp = res.get(0);
-            long cnt = (long) tmp.get("count(*)");
-            if (cnt == 1) {
-                return false;
-            } else {
-                List<Map<String, Object>> res2 = sqlMapper.sql(register);
-                return true;
-            }
         }
         return false;
     }
@@ -106,7 +105,9 @@ public class UserServiceImpl implements UserService {
     //验证邮箱
     @Override
     public  Boolean checkMail(double userVerificationCode){
-        if(user.getVerificationCode()==userVerificationCode){
+
+        String vftc = String.valueOf(userVerificationCode);
+        if(user.getVerificationCode()==vftc){
             return true;
         }else {
             return false;

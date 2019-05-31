@@ -21,7 +21,7 @@ public class sendMail {
         Transport transport = session.getTransport();
         /**3.使用邮箱的用户名和密码连上邮件服务器，发送邮件时，发送人需要提交邮箱的用户名和密码给smtp服务器，
         用户名和密码都通过验证之后才能够正常发送邮件给收件人*/
-        transport.connect("ash_yjh@163.com","yu17623064506");
+        transport.connect("ash_yjh@163.com","");
         //4.创建邮件
         Message message = createMail.createSimpleMail(session);
         //5.发送邮件
